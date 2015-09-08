@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>AWS MGT Website</title>
+    <style>
+        .compulsory {
+            font-weight: bold;
+            color: red;
+        }
+        
+        .notes {
+            color: red;
+        }
+    </style>
+    <script type="text/javascript"  src="{{ base_uri }}{{ url_for('static', filename='js/jquery-2.1.3.min.js') }}"></script>
+    <script type="text/javascript"  src="{{ base_uri }}{{ url_for('static', filename='js/jquery.validate.min.js') }}"></script>
+    <script>
+        $(function() {
+            $("form#newstation").validate({
+                //debug: true,
+                rules: {
+                    aws_id: {
+                        required: true,
+                        minlength: 5
+                    },
+                    station_name: {
+                        required: true,
+                        minlength: 5
+                    },
+                    file_name: {
+                        required: true,
+                        minlength: 5
+                    },
+                    scm: {
+                        required: true,
+                        extension: "scm|SCM"
+                    },
+                    owner: {
+                        required: true
+                    },
+                    district: {
+                        required: true
+                    },
+                    lat: {
+                        required: true,
+                        number: true
+                    },
+                    lon: {
+                        required: true,
+                        number: true
+                    },
+                    elevation: {
+                        required: true,
+                        number: true
+                    }
+                },
+                messages: {
+                    aws_id: {
+                        required: "You must enter an aws_id for the new station",
+                        minlength: "aws_ids must be at least 5 characters long"
+                    },
+                    station_name: {
+                        required: "You must enter a name for the new station",
+                        minlength: "Names must be at least 5 characters long"
+                    },
+                    file_name: {
+                        required: "You must enter a file name for the new station",
+                        minlength: "File names must be at least 5 characters long"
+                    },
+                    scm: {
+                        required: "You must upload an SCM file for the new station",
+                        extension: "SCM file must end in .SCM or .scm"
+                    },
+                    owner: {
+                        required: "Please select an real owner"
+                    },
+                    district: {
+                        required: "Please select an real district"
+                    },
+                    lat: {
+                        required: "You must enter a latitude",
+                        number: "Latitude must be a number"
+                    },
+                    lon: {
+                        required: "You must enter a longitude",
+                        number: "Longitude must be a number"
+                    },
+                    elevation: {
+                        required: "You must enter an elevation",
+                        number: "Elevation must be a number"
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    if (element.attr("name")) {
+                        $("#" + element.attr("name") + "_notes").text(error[0].innerHTML);
+                    }
+                },
+                success: function () {
+                    $("#errbox").hide();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>AWS MGT Website</h1>
+    <h2>Add Station</h2>
+    <p>Fill out the form below to create a new station. You must fill out compulsory items befor you can submit but you may edit their values later.</p>
+    <form id="newstation" action="{{ url_for('.stations_add') }}" method="post" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <th><label for="aws_id">AWS ID</label><span class="compulsory">*</span></th>
+                <td><input type="text" id="aws_id" name="aws_id" /></td>
+                <td id="aws_id_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="bom_number">BoM Number</label></th>
+                <td><input type="text" id="bom_number" name="bom_number" /></td>
+                <td id="bom_number_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="dfw_id">DfW ID</label></th>
+                <td><input type="text" id="dfw_id" name="dfw_id" /></td>
+                <td id="dfw_id_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="station_name">Station Name</label><span class="compulsory">*</span></th>
+                <td><input type="text" id="station_name" name="station_name" /></td>
+                <td id="station_name_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="file_name">File Name</label><span class="compulsory">*</span></th>
+                <td><input type="text" id="file_name" name="file_name" /></td>
+                <td id="file_name_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="scm">Schema File</label><span class="compulsory">*</span></th>
+                <td><input type="file" id="scm" name="scm" accept=".SCM, .scm"></td>
+                <td id="scm_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="owner">Owner</label><span class="compulsory">*</span></th>
+                <td>
+                    <select id="owner" name="owner">
+                        <option value="">Choose...</option>
+                        <option value="AWNRM">Alinytljara Wilurara NRM</option>
+                        <option value="LMW">Lower Murray Water</option>
+                        <option value="MCV">McLaren Vale</option>
+                        <option value="SAMDB">SA MDB NRM</option>
+                        <option value="SENRM">South East NRM</option>
+                    </select>
+                </td>
+                <td id="owner_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="district">District</label><span class="compulsory">*</span></th>
+                <td>
+                    <select id="district" name="district">
+                        <option value="">Choose...</option>
+                        {% for district in districts %}
+                        <option value="{{ district['district_id'] }}">{{ district['name'] }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td id="district_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="lat">Latitude</label><span class="compulsory">*</span></th>
+                <td><input type="text" id="lat" name="lat" /></td>
+                <td id="lat_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="lon">Longitude</label><span class="compulsory">*</span></th>
+                <td><input type="text" id="lon" name="lon" /></td>
+                <td id="lon_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="elevation">Elevation</label><span class="compulsory">*</span></th>
+                <td><input type="text" id="elevation" name="elevation" /></td>
+                <td id="elevation_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="deploydate">Deploy Date</label></th>
+                <td><input type="text" id="deploydate" name="deploydate" /></td>
+                <td id="deploydate_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="status">Status</label><span class="compulsory">*</span></th>
+                <td>
+                    <select id="status" name="status">
+                        <option value="on">On</option>
+                        <option value="off">Off</option>
+                    </select>
+                </td>
+                <td id="status_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <th><label for="message">Message</label></th>
+                <td><textarea id="message" name="message" style="width:230px;"></textarea></td>
+                <td id="message_notes" class="notes"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Save" id="save" /></td>
+                <td></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

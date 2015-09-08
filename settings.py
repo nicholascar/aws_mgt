@@ -1,11 +1,12 @@
 PORT = 8889
 DEBUG = True
-AWS_API_HOME = 'c:\\work\\aws_mgt\\'
+#AWS_API_HOME = 'c:\\work\\aws_mgt\\'
 #AWS_API_HOME = '/opt/aws_api/'
+AWS_API_HOME = '/home/car587/ownCloud/code/aws_api/'
 BASE_URI = 'http://localhost:8889/'
 #BASE_URI = 'http://104.237.155.49/'
 #DB_SERVER = 'localhost'
 DB_SERVER = '104.237.155.49'
 DB_USR = 'aws'
-DB_PWB = 'ASCEshort1'
+DB_PWB = 'MONTIETHevap1'
 DB_DB = 'aws'
