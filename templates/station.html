@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>AWS MGT Website</title>
+</head>
+<body>
+    <h1>AWS MGT Website</h1>
+    <h2>Stations: {{ station['name'] }}</h2>
+    <table>
+    {% for k, v in station %}
+        {% if k != 'scm' %}
+            <tr><th><label for="{{ k }}">{{ k }}</label></th><td><input type="text" id="{{ k }}" name="{{ k }}" value="{{ v }}" /></td></tr>
+        {% else %}
+            <tr><th><label for="{{ k }}">{{ k }}</label></th><td><textarea id="{{ k }}" name="{{ k }}" style="width:230px;">{{ v }}</textarea></td></tr>
+        {%  endif %}
+    {% endfor %}
+    </table>
+</body>
+</html>

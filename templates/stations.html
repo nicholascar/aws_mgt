@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>AWS MGT Website</title>
+</head>
+<body>
+    <h1>AWS MGT Website</h1>
+    <h2>All Stations</h2>
+
+    <ul>
+        {% for station in stations %}
+        <li><a href="/station/{{ station['aws_id'] }}">{{ station['name'] }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

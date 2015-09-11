@@ -22,6 +22,7 @@ def stations_add():
     if request.method == 'POST':
         # inputs assumed valid
         functions.add_station(
+            functions.db_connect(),
             request.form.get('aws_id'),
             request.form.get('bom_number'),
             request.form.get('dfw_id'),
@@ -48,4 +49,19 @@ def stations_add():
 
 @routes.route('/functions/station_edit')
 def stations_edit():
-    return render_template('stations_edit.html')
+    return render_template('station.html')
+
+
+@routes.route('/station/')
+def stations():
+    conn = functions.db_connect()
+    stations = functions.get_stations(conn)
+    functions.db_disconnect(conn)
+    return render_template('stations.html', stations=stations)
+
+@routes.route('/station/<string:aws_id>')
+def station(aws_id):
+    conn = functions.db_connect()
+    station = functions.get_station(conn, aws_id)
+    functions.db_disconnect(conn)
+    return render_template('station.html', station=station)
